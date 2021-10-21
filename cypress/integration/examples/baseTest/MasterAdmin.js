@@ -23,7 +23,7 @@ var mehanic=''
 //const idClient ='9010'
 
 
-describe ('BaseTest|Mobile Version|UA|CarBook', function(){
+describe ('Dev|SH|Mobile Version|UA|', function(){
     beforeEach('User LogIn ', () => {
         cy.visit(baseUrl)
             .then(()=>{

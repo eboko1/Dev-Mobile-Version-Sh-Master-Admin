@@ -5,3 +5,4 @@ cypress/videos/
 examples/*/cypress/videos
 examples/*/cypress/screenshots
 results.json
+node_modules

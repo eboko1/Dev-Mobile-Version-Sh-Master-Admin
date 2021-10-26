@@ -23,7 +23,7 @@ var mehanic=''
 //const idClient ='9010'
 
 
-describe ('Dev|SH|Mobile Version|UA|', function(){
+describe ('Dev|Mobile|SH|Admin|UA', function(){
     beforeEach('User LogIn ', () => {
         cy.visit(baseUrl)
             .then(()=>{
@@ -56,21 +56,23 @@ describe ('Dev|SH|Mobile Version|UA|', function(){
         cy.get('#vehicle_add_from_number').type(idClient)
         cy.get('#vehicle_add_from_vin').type('MDHFBUK13U0107589')
         cy.wait(1000)
-        cy.get('.ant-select-selection').eq(0).click()
+        cy.get(':nth-child(3) > .ant-col-12 > .ant-row > .ant-col > .ant-form-item-control > .ant-form-item-children > .ant-select > .ant-select-selection').click()
         cy.get('.ant-select-dropdown-menu-item-active').click()
         cy.wait(1000)
-        cy.get('.ant-select-selection').eq(1).click()
+        cy.get(':nth-child(4) > .ant-col-12 > .ant-row > .ant-col > .ant-form-item-control > .ant-form-item-children > .ant-select > .ant-select-selection').click()
         cy.get('.ant-select-dropdown-menu-item-active').click()
         cy.wait(1000)
-        cy.get('.ant-select-selection').eq(2).click()
+        cy.get(':nth-child(5) > .ant-col-12 > .ant-row > .ant-col > .ant-form-item-control > .ant-form-item-children > .ant-select > .ant-select-selection').click()
         cy.get('.ant-select-dropdown-menu-item-active').click()
         cy.wait(1000)
-        cy.get('.ant-select-selection').eq(3).click()
+        cy.get(':nth-child(6) > .ant-col-12').click()
         cy.get('.ant-select-dropdown-menu-item-active').click()
         cy.wait(1000)
         cy.get('.ant-btn').contains('OK').click({ force: true }) ///ОК Додавання Авто
-        cy.wait(5000)  
+        cy.wait(2000)  
         cy.get('.ant-modal-footer > div > .ant-btn-primary').click({ force: true }) // Додати Клієнта
+        cy.wait(2000)  
+        cy.get('[style="display: flex;"] > .ant-select > .ant-select-selection').contains('БазовийMobi'+idClient).should('exist')
         cy.wait(4000)   
     })
 
@@ -130,6 +132,7 @@ describe ('Dev|SH|Mobile Version|UA|', function(){
             })
         
         })
+
     it('Додавання Робіт', function(){
         cy.visit(approve)
         .then(()=>{
@@ -158,7 +161,7 @@ describe ('Dev|SH|Mobile Version|UA|', function(){
             cy.wait(2000)
             cy.get(':nth-child(7) > :nth-child(2) > .ant-input-number > .ant-input-number-input-wrap > .ant-input-number-input').clear().clear().type(2)
             cy.wait(2000)
-            cy.get('.ant-modal-footer > div > .ant-btn-primary').contains('OK').click({ force: true })
+            cy.get('.ant-modal-footer > div > .ant-btn-primary').first().click({ force: true })
     })  
 
     it('Додавання Робіт через Комплекси', function(){
@@ -193,7 +196,9 @@ describe ('Dev|SH|Mobile Version|UA|', function(){
         cy.get('.ant-tabs-tabpane-active > .ant-table-wrapper > .ant-spin-nested-loading > .ant-spin-container > .ant-table > .ant-table-content > .ant-table-body > table > .ant-table-tbody > [data-row-key="0"] > :nth-child(1)').eq(0).click({ force: true })
         cy.get('.styles-m__mobileTableEmployee---3qb2T > :nth-child(2) > .ant-select > .ant-select-selection > .ant-select-selection__rendered > .ant-select-selection-selected-value').contains('Vika').should('exist')   
         cy.wait(1000)
-        cy.get('.ant-btn-primary').click()
+        cy.get(':nth-child(3) > .ant-select > .ant-select-selection').contains('Балансування диска').should('exist') 
+        cy.wait(1000)
+        cy.get('.ant-btn-primary').contains('Зберегти').click({ force: true })
         cy.wait(3000)
         cy.get('.styles-m__headerContorlsShowIcon---6gTgk > .anticon > svg').click()
         cy.wait(3000)

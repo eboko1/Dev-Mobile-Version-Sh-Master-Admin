@@ -12,13 +12,16 @@
     "DevLogin":"dev@admin.com",
     "Dev1Login":"devsh@admin.com",
     "ProdLogin":"prod@admin.com",
+    "SAdminLogin":"vtest@test.com",
     "Password":"456789",
     
+
   
     "TestSpecialistLogin":"0502333355",
     "TestSpecialistPassword":"Specialist.Pro-01.21",
     "DevSpecialistLogin":"0400000010",
     "DevSpecialistPassword":"123456",
+    "SAdminPassword":"123456",
   
     "baseUrlTest":"https://test-my.carbook.pro",
     "baseUrlDev":"https://dev-my.carbook.pro",

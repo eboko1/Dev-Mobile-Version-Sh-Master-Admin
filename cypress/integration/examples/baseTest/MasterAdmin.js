@@ -112,7 +112,7 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
              cy.wait(3000)
              cy.get('.styles-m__hiddenHeaderContorls---1N6ed > .styles-m__dropdownTitle---3Vlog > .anticon').click()
              cy.wait(3000)
-             cy.get('.ant-dropdown-menu').contains('Запис').click()
+             cy.get('.ant-dropdown-menu').contains('Запис').first().click({ force: true })
              cy.wait(5000)
 
     })
@@ -128,9 +128,10 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
             cy.get('.styles-m__ordernLink---2V9V3').first().click({ force: true })
             .then(()=>{
                 cy.get('.ant-tabs-nav > :nth-child(1) > :nth-child(2)').click({ force: true }) // табка роботи в НЗ
+                cy.wait(3000)
                 cy.get('.styles-m__title---34B8J').contains('Запис').should('exist')
+                cy.wait(2000)
             })
-        
         })
 
     it('Додавання Робіт', function(){
@@ -184,7 +185,7 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         })
     })
 
-    it('Перевірка відображення працівника в модалці Роботи', function(){
+    it('Перевірка відображення працівника та найменування Роботи', function(){
         cy.visit(approve)
         .then(()=>{
             cy.get('.ant-input').type(idClient)   //пошук        

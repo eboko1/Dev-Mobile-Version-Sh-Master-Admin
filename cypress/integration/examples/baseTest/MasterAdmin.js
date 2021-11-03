@@ -1,34 +1,28 @@
 /// <reference types="cypress" />
 
-
-
-const url = 'dev-'   //test-   // dev-  // ''
-
-
-const baseUrl = 'https://'+url+'my.carbook.pro';
-const appointments = 'https://'+url+'my.carbook.pro/orders/appointments';
-const approve = 'https://'+url+'my.carbook.pro/orders/approve';
-const progress = 'https://'+url+'my.carbook.pro/orders/progress';
-const success = 'https://'+url+'my.carbook.pro/orders/success';
-const cancel = 'https://'+url+'my.carbook.pro/orders/cancel';
+const baseUrl = 'https://'+Cypress.env('url')+'my.carbook.pro';
+const appointments = 'https://'+Cypress.env('url')+'my.carbook.pro/orders/appointments';
+const approve = 'https://'+Cypress.env('url')+'my.carbook.pro/orders/approve';
+const progress = 'https://'+Cypress.env('url')+'my.carbook.pro/orders/progress';
+const success = 'https://'+Cypress.env('url')+'my.carbook.pro/orders/success';
+const cancel = 'https://'+Cypress.env('url')+'my.carbook.pro/orders/cancel';
 
 
 var date = new Date();
+//const idClient ='41011'
 const idClient =''+date.getDate()+date.getMonth()+date.getMinutes();
 var second = parseInt(date.getSeconds())+10
 var minute = parseInt(date.getMinutes())+10
-
 var mehanic=''
 
-//const idClient ='9010'
 
 
 describe ('Dev|Mobile|SH|Admin|UA', function(){
     beforeEach('User LogIn ', () => {
         cy.visit(baseUrl)
             .then(()=>{
-                cy.get('#login.ant-input').type(Cypress.env('Dev1Login'));  // ProdLogin     DevLogin      ProdLogin   TestSpecialistLogin  DevSpecialistLogin
-                cy.get('#password').type(Cypress.env('Password')); //  TestSpecialistPassword  DevSpecialistPassword
+                cy.get('#login.ant-input').type(Cypress.env('Login'));
+                cy.get('#password').type(Cypress.env('Password')); 
         })
         cy.get('button').click()
         cy.intercept('GET', baseUrl+'/dashboard')
@@ -50,7 +44,11 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         cy.get('#surname').type('БазовийMobi'+idClient)
         cy.wait(2000)
         cy.get('.ant-input-number-input').type('683781977')
-        cy.get('.ant-modal-confirm-btns > .ant-btn').first().click({ force: true })
+        if(cy.get('.ant-modal-confirm-body-wrapper').should('exist')){
+            cy.get('.ant-modal-confirm-btns > .ant-btn').first().click({ force: true }) //модалка цей номер вже існує
+        } else {
+            cy.log('Не відображається Модалка цей номер вже існує ')
+        }
         cy.log('Додавання а/м')
         cy.get('.styles-m__addVehicleButtonCont---Y1h26 > .ant-btn').first().click({ force: true })
         cy.get('#vehicle_add_from_number').type(idClient)
@@ -74,6 +72,7 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         cy.wait(2000)  
         cy.get('[style="display: flex;"] > .ant-select > .ant-select-selection').contains('БазовийMobi'+idClient).should('exist')
         cy.wait(4000)   
+        
     })
 
     it('Додавання ремонту ч/з +|Планувальник', function(){
@@ -105,16 +104,18 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
              cy.get('#employee > .ant-select-selection').click().type('Механік')
              cy.wait(2000)
              cy.get('.ant-select-dropdown-menu-item-active').click()
-             cy.wait(2000)
+             cy.wait(1000)
+             cy.get('#comment').type('Комент НЗ не заляпать салон)')
+             cy.wait(1000)
+             cy.get('#comment').should('have.text','Комент НЗ не заляпать салон)')
              cy.get('.anticon-save ').first().click({ force: true })
              cy.wait(3000)
              cy.get('.styles-m__headerContorlsShowIcon---6gTgk > .anticon > svg').click()
-             cy.wait(3000)
+             cy.wait(2000)
              cy.get('.styles-m__hiddenHeaderContorls---1N6ed > .styles-m__dropdownTitle---3Vlog > .anticon').click()
              cy.wait(3000)
              cy.get('.ant-dropdown-menu').contains('Запис').first().click({ force: true })
              cy.wait(5000)
-
     })
 
         it('Перевірка НЗ в статусі Запису', function(){
@@ -163,6 +164,9 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
             cy.get(':nth-child(7) > :nth-child(2) > .ant-input-number > .ant-input-number-input-wrap > .ant-input-number-input').clear().clear().type(2)
             cy.wait(2000)
             cy.get('.ant-modal-footer > div > .ant-btn-primary').first().click({ force: true })
+            cy.wait(1000)
+            cy.get('[data-row-key="0"] > :nth-child(1)').should('exist')
+            cy.wait(1000)
     })  
 
     it('Додавання Робіт через Комплекси', function(){
@@ -182,6 +186,8 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
             cy.wait(2000)
             cy.get('.ant-btn-primary').last().click({force: true})
             cy.wait(3000)
+            cy.get('[data-row-key="1"] > :nth-child(1)').should('exist')
+            cy.wait(1000)
         })
     })
 
@@ -196,8 +202,8 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         })
         cy.get('.ant-tabs-tabpane-active > .ant-table-wrapper > .ant-spin-nested-loading > .ant-spin-container > .ant-table > .ant-table-content > .ant-table-body > table > .ant-table-tbody > [data-row-key="0"] > :nth-child(1)').eq(0).click({ force: true })
         cy.get('.styles-m__mobileTableEmployee---3qb2T > :nth-child(2) > .ant-select > .ant-select-selection > .ant-select-selection__rendered > .ant-select-selection-selected-value').contains('Vika').should('exist')   
-        cy.wait(1000)
-        cy.get(':nth-child(3) > .ant-select > .ant-select-selection').contains('Балансування диска').should('exist') 
+        cy.wait(3000)
+        cy.get('.ant-modal-body').find('.ant-select-selection-selected-value').eq(0).should('have.text','Шиномонтажний комплекс') 
         cy.wait(1000)
         cy.get('.ant-btn-primary').contains('Зберегти').click({ force: true })
         cy.wait(3000)
@@ -206,7 +212,6 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         cy.get('.styles-m__hiddenHeaderContorls---1N6ed > .styles-m__dropdownTitle---3Vlog > .anticon').click()
         cy.wait(3000)
         cy.get('.ant-dropdown-menu').contains('Ремонт').click()
-        cy.wait(5000)
     })
 
         it('Перевірка статуса НЗ / Ремонт', function(){
@@ -219,7 +224,6 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
                 cy.get('.ant-tabs-nav > :nth-child(1) > :nth-child(2)').click({ force: true }) // табка роботи в НЗ
                 cy.get('.styles-m__title---34B8J').contains('Ремонт').should('exist')
             })
-        
         })
 
     it('Додавання Запчастин', function(){
@@ -238,6 +242,9 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         cy.get(':nth-child(4) > :nth-child(2) > .ant-input-number > .ant-input-number-input-wrap > .ant-input-number-input').clear().type(1234)
         cy.get(':nth-child(5) > :nth-child(2) > .ant-input-number > .ant-input-number-input-wrap > .ant-input-number-input').clear().type(1.6)
         cy.get('.ant-btn-primary').click({ force: true })
+        cy.wait(2000) 
+        cy.get('.ant-table-tbody > .ant-table-row > :nth-child(1)').should('exist')
+        cy.wait(2000) 
     })
 
     it('Видалення Запчастин', function(){
@@ -261,7 +268,8 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         cy.get('.ant-btn-danger').click({ force: true })
         cy.wait(1000) 
         cy.get('.ant-modal-confirm-btns > .ant-btn-danger').click({ force: true })
-        cy.wait(3000)  
+        cy.wait(1000)  
+        cy.get('.ant-table-tbody > .ant-table-row > :nth-child(2)').should('exist')
     })
 
     it('Відображення табки Історії ремонту', function(){
@@ -273,6 +281,7 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         .then(()=>{
             cy.get('.ant-tabs-nav > :nth-child(1) > :nth-child(4)').click({ force: true }) // табка роботи в НЗ
             cy.get('.ant-tabs-tabpane-active').should('exist')
+            cy.wait(2000)
         })
     })
 
@@ -306,10 +315,15 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
             cy.get('.styles-m__hiddenHeaderContorls---1N6ed > .styles-m__dropdownTitle---3Vlog > .anticon').click()
             cy.wait(3000)
             cy.get('.ant-dropdown-menu').contains('Завершено').click()
-            cy.get('#withPayment > :nth-child(1)').click()
-            cy.get('.ant-checkbox').last().click()
-            cy.get('.ant-btn-primary').click()
-            cy.wait(3000)
+            if( cy.get('.ant-dropdown-menu').contains('Завершено')){
+
+            }
+            else {
+                cy.get('#withPayment > :nth-child(1)').click()
+                cy.get('.ant-checkbox').last().click()
+                cy.get('.ant-btn-primary').click()
+                cy.wait(3000)
+            }
         })
     })
 

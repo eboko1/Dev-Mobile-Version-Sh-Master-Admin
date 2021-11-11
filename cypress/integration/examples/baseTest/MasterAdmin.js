@@ -236,7 +236,7 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
             cy.get('.ant-tabs-nav > :nth-child(1) > :nth-child(2)').click({ force: true }) // табка роботи в НЗ
         })
         cy.get('.ant-tabs-tabpane-active > .ant-table-wrapper > .ant-spin-nested-loading > .ant-spin-container > .ant-table > .ant-table-content > .ant-table-body > table > .ant-table-tbody > [data-row-key="0"] > :nth-child(1)').eq(0).click({ force: true })
-        cy.get('.styles-m__mobileTableEmployee---3qb2T > :nth-child(2) > .ant-select > .ant-select-selection > .ant-select-selection__rendered > .ant-select-selection-selected-value').contains('Vika').should('exist')   
+        cy.get('.styles-m__mobileTableEmployee---3qb2T > :nth-child(2) > .ant-select > .ant-select-selection > .ant-select-selection__rendered > .ant-select-selection-selected-value').should('exist')   
         cy.wait(3000)
         cy.get('.ant-modal-body').find('.ant-select-selection-selected-value').eq(0).should('have.text','Шиномонтажний комплекс') 
         cy.wait(1000)
@@ -387,7 +387,7 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
             cy.wait(3000)
             cy.get('.ant-select-selection-selected-value').should('have.text',text)
         })
-        cy.get('[data-row-key="913"] > :nth-child(2)').should('exist')
+        cy.get('[data-row-key] > :nth-child(2)').should('exist')
     })
 
     it('Перевірка картки Працівника', function(){

@@ -1,4 +1,4 @@
-name: Base Tests
+name: Base|Mobile|Sh|UA|
 #off
 on:
   push:

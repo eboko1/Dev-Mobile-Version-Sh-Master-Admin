@@ -364,7 +364,7 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
 
     it(' Перевірка Відкриття модалки створення Каси', function(){
         cy.get('.anticon-menu-unfold > svg').click()
-        cy.get('.ant-menu-submenu-title').contains('Бухгалтерія').click()
+        cy.get('.ant-menu-submenu-title').contains('Довідник').click()
         cy.get('.ant-menu-item').contains('Каси').click()
         cy.wait(3000)
         cy.get('[data-row-key] > :nth-child(1)').should('exist')

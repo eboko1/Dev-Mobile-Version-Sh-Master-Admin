@@ -9,9 +9,9 @@
 
   "env": {
     "url":"",
-    "Login":"vtest@test.com",
-    "Password":"123456",
-    "idClient":"41014" 
-    
+    "Login":"my@admin.com",
+    "Password":"456789",
+    "//Login":"vtest@test.com",
+    "//Password":"123456"    
   }
 }

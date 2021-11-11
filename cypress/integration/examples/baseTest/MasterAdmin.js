@@ -17,7 +17,7 @@ var mehanic=''
 
 
 
-describe ('Dev|Mobile|SH|Admin|UA', function(){
+describe ('Mobile|SH|Admin|UA', function(){
     beforeEach('User LogIn ', () => {
         cy.visit(baseUrl)
             .then(()=>{

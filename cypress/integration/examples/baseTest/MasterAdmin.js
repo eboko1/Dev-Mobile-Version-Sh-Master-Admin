@@ -9,7 +9,7 @@ const cancel = 'https://'+Cypress.env('url')+'my.carbook.pro/orders/cancel';
 
 
 var date = new Date();
-//const idClient ='41011'
+//const idClient ='111053'
 const idClient =''+date.getDate()+date.getMonth()+date.getMinutes();
 var second = parseInt(date.getSeconds())+10
 var minute = parseInt(date.getMinutes())+10
@@ -45,34 +45,50 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         cy.wait(2000)
         cy.get('.ant-input-number-input').type('683781977')
         if(cy.get('.ant-modal-confirm-body-wrapper').should('exist')){
+            cy.wait(2000)
             cy.get('.ant-modal-confirm-btns > .ant-btn').first().click({ force: true }) //модалка цей номер вже існує
         } else {
-            cy.log('Не відображається Модалка цей номер вже існує ')
+            cy.console('Не відображається Модалка цей номер вже існує')
         }
-        cy.log('Додавання а/м')
+        cy.get('#comment').type('Коментар в Картці Клієнта')
+        cy.get('#comment').should('have.text','Коментар в Картці Клієнта')
+        
+        cy.get('.ant-table-content').contains('Вiдсутнi Данi').should('exist')
+        cy.wait(1000)/// cy.log('Додавання а/м')
         cy.get('.styles-m__addVehicleButtonCont---Y1h26 > .ant-btn').first().click({ force: true })
         cy.get('#vehicle_add_from_number').type(idClient)
         cy.get('#vehicle_add_from_vin').type('MDHFBUK13U0107589')
         cy.wait(1000)
-        cy.get(':nth-child(3) > .ant-col-12 > .ant-row > .ant-col > .ant-form-item-control > .ant-form-item-children > .ant-select > .ant-select-selection').click()
+        cy.get('.ant-select > .ant-select-selection').contains('Виберіть рік').click()
         cy.get('.ant-select-dropdown-menu-item-active').click()
         cy.wait(1000)
-        cy.get(':nth-child(4) > .ant-col-12 > .ant-row > .ant-col > .ant-form-item-control > .ant-form-item-children > .ant-select > .ant-select-selection').click()
+        cy.get('.ant-select > .ant-select-selection').contains('Виберіть марку').click()
         cy.get('.ant-select-dropdown-menu-item-active').click()
         cy.wait(1000)
-        cy.get(':nth-child(5) > .ant-col-12 > .ant-row > .ant-col > .ant-form-item-control > .ant-form-item-children > .ant-select > .ant-select-selection').click()
+        cy.get(':nth-child(5) > .ant-col-12').click()
         cy.get('.ant-select-dropdown-menu-item-active').click()
         cy.wait(1000)
         cy.get(':nth-child(6) > .ant-col-12').click()
         cy.get('.ant-select-dropdown-menu-item-active').click()
         cy.wait(1000)
+        cy.get('.ant-select > .ant-select-selection').contains('Тип авто').click() //+ тип авто 
+        cy.get('.ant-select-dropdown-menu-item-active').click()
+        cy.wait(1000)
+        cy.get(':nth-child(2) > .ant-col > .ant-form-item-control > .ant-form-item-children > .ant-input-number > .ant-input-number-handler-wrap > .ant-input-number-handler-down').click({ force: true })
+        cy.wait(1000)
+        //cy.get('.ant-select > .ant-select-selection').contains('Виберіть колір').click() //+ кольору
+        cy.get(':nth-child(8) > .ant-col-12 > .ant-row > .ant-col > .ant-form-item-control > .ant-form-item-children > .ant-select > .ant-select-selection').click()
+        cy.get('.ant-select-dropdown-menu-item-active').click()
+        cy.wait(1000)
         cy.get('.ant-btn').contains('OK').click({ force: true }) ///ОК Додавання Авто
         cy.wait(2000)  
+        cy.get('#comment').should('have.text','Коментар в Картці Клієнта')
+        cy.get('.ant-table-row > :nth-child(1)').should('be.visible')
+
         cy.get('.ant-modal-footer > div > .ant-btn-primary').click({ force: true }) // Додати Клієнта
         cy.wait(2000)  
         cy.get('[style="display: flex;"] > .ant-select > .ant-select-selection').contains('БазовийMobi'+idClient).should('exist')
         cy.wait(4000)   
-        
     })
 
     it('Додавання ремонту ч/з +|Планувальник', function(){
@@ -86,16 +102,35 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         cy.wait(2000)
         cy.get('.ant-modal-body > .ant-btn').first().click({ force: true }) ///додати Ремонт
         cy.wait(4000)
-    })
+    })   
+
+    it('Перевірка заповнених полів в НЗ: тип Авто, Радіус, Тип Заміни, Коментар Клієнта', function(){
+        cy.get('.anticon-menu-unfold > svg').click()
+        cy.get('.ant-menu-item').contains('Ремонти').click()
+        cy.wait(4000)
+        cy.get('.ant-input').type(idClient)   //пошук
+        cy.wait(4000)
+        cy.get('.styles-m__ordernLink---2V9V3').first().click({ force: true })
+        cy.wait(4000)
+        cy.get('.ant-select > .ant-select-selection').contains('Виберіть тип заміни').click()
+        cy.get('.ant-select-dropdown-menu-item-active').click()
+        cy.get('.ant-select > .ant-select-selection').contains('Виберіть Слюсаря-Механіка').click()
+        cy.get('.ant-select-dropdown-menu-item-active').click()
+        cy.get(' #comment').type('Коментар Клієнта в НЗ: не заляпать авто')
+        cy.get('.ant-select-selection-selected-value').eq(2).should('have.text','Легковий')
+        cy.get('.ant-select-selection-selected-value').eq(3).should('have.text','13R')
+        cy.get('.ant-select-selection-selected-value').eq(4).should('have.text','Купив в Autodoc')
+        cy.get(' #comment').should('have.text','Коментар Клієнта в НЗ: не заляпать авто')
+    })  
 
     it('Додавання Механіка в НЗ', function(){
             cy.get('.anticon-menu-unfold > svg').click()
             cy.get('.ant-menu-item').contains('Ремонти').click()
-            cy.wait(4000)
+            cy.wait(3000)
             cy.get('.ant-input').type(idClient)   //пошук
-            cy.wait(4000)
+            cy.wait(3000)
             cy.get('.styles-m__ordernLink---2V9V3').first().click({ force: true })
-            cy.wait(4000)
+            cy.wait(3000)
             cy.get('.ant-select-selection').last().invoke('text')// отримати механіка
                 .then (text => {
                     mehanic = text;
@@ -118,22 +153,22 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
              cy.wait(5000)
     })
 
-        it('Перевірка НЗ в статусі Запису', function(){
-            cy.visit(appointments)
-            .then(()=>{
-                cy.get('.ant-input').type(idClient)   //пошук        
-            })
-            cy.get('.ant-select-selection').click()
-            cy.get('.ant-select-dropdown-menu > :nth-child(2)').click()
-            cy.wait(2000)
-            cy.get('.styles-m__ordernLink---2V9V3').first().click({ force: true })
-            .then(()=>{
-                cy.get('.ant-tabs-nav > :nth-child(1) > :nth-child(2)').click({ force: true }) // табка роботи в НЗ
-                cy.wait(3000)
-                cy.get('.styles-m__title---34B8J').contains('Запис').should('exist')
-                cy.wait(2000)
-            })
+    it('Перевірка НЗ в статусі Запису', function(){
+        cy.visit(appointments)
+        .then(()=>{
+            cy.get('.ant-input').type(idClient)   //пошук        
         })
+        cy.get('.ant-select-selection').click()
+        cy.get('.ant-select-dropdown-menu > :nth-child(2)').click()
+        cy.wait(2000)
+        cy.get('.styles-m__ordernLink---2V9V3').first().click({ force: true })
+        .then(()=>{
+            cy.get('.ant-tabs-nav > :nth-child(1) > :nth-child(2)').click({ force: true }) // табка роботи в НЗ
+            cy.wait(3000)
+            cy.get('.styles-m__title---34B8J').contains('Запис').should('exist')
+            cy.wait(2000)
+        })
+    })
 
     it('Додавання Робіт', function(){
         cy.visit(approve)
@@ -327,6 +362,34 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         })
     })
 
+    it(' Перевірка Відкриття модалки створення Каси', function(){
+        cy.get('.anticon-menu-unfold > svg').click()
+        cy.get('.ant-menu-submenu-title').contains('Бухгалтерія').click()
+        cy.get('.ant-menu-item').contains('Каси').click()
+        cy.wait(3000)
+        cy.get('[data-row-key] > :nth-child(1)').should('exist')
+        cy.get('.ant-btn').contains('Додати').first().click({force: true})
+        cy.get('.ant-select-selection-selected-value').should('have.text','Готівка')
+        cy.get('.ant-modal-close-x').click()
+        cy.get('.ant-table-content').should('exist')
+    })
+
+    it(' Перевірка Відкриття сторінки Каса і Банк та перехід на Рух Грошей, перевірка фільтра по переходу до каси', function(){
+        cy.get('.anticon-menu-unfold > svg').click()
+        cy.get('.ant-menu-submenu-title').contains('Бухгалтерія').click()
+        cy.get('.ant-menu-item').contains('Каса і Банк').click()
+        cy.wait(3000)
+        cy.get('[data-row-key] > :nth-child(1)').should('exist')
+        cy.get('[data-row-key] > :nth-child(1) > div > a').first().invoke('text')
+        .then (text => { // отримати назву першої каси в таблиці 
+            cy.log(text)
+            cy.get('[data-row-key] > :nth-child(1) > div > a').first().click({force: true})// перехід на Рух Грошей
+            cy.wait(3000)
+            cy.get('.ant-select-selection-selected-value').should('have.text',text)
+        })
+        cy.get('[data-row-key="913"] > :nth-child(2)').should('exist')
+    })
+
     it('Перевірка картки Працівника', function(){
         cy.get('.anticon-menu-unfold > svg').click()
         cy.get('.ant-menu-submenu-title').contains('Довідник').click()
@@ -337,5 +400,24 @@ describe ('Dev|Mobile|SH|Admin|UA', function(){
         cy.get('.styles-m__employeeSection---17Lh6').should('exist')
         cy.wait(3000)
     })
+
+    // додати перевірка кнопок копіювання
+    it('Створення копії НЗ', function(){
+        cy.visit(progress)
+        .then(()=>{
+            cy.get('.ant-input').type(idClient)   //пошук        
+        })
+        cy.get('.styles-m__ordernLink---2V9V3').first().click({ force: true })
+        .then(()=>{
+            cy.wait(3000)
+            cy.get('.styles-m__headerContorlsShowIcon---6gTgk > .anticon > svg').click()
+            cy.wait(3000)
+            cy.get('.styles-m__hiddenHeaderContorls---1N6ed > .anticon-copy').click()
+            cy.wait(3000)
+            cy.get('.styles-m__title---34B8J > span').should('have.text','Новий')
+        })
+          
+    })
+
   
 })

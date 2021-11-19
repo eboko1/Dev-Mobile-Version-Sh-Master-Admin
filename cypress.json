@@ -9,7 +9,7 @@
 
   "env": {
     "url":"dev-",
-    "Login":"mysh@admin.com",
+    "Login":"devsh@admin.com",
     "Password":"456789",
     "//Login":"vtest@test.com",
     "//Password":"123456"    

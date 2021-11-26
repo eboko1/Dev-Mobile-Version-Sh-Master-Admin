@@ -6,7 +6,6 @@
   "projectId": "mbwgua",
   "chromeWebSecurity": false,
   
-
   "env": {
     "url":"dev-",
     "Login":"devsh@admin.com",
